@@ -1,18 +1,18 @@
 version: '3'
 
 services:
-  database:
+  streaming:
     image: postgres
     ports:
       - '5432:5432'
-    container_name: postgres
+    container_name: streaming
     restart: always
     volumes:
-      - postgres-disk:/var/lib/postgresql/data
+      - streaming-disk:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: Julinho2
-      POSTGRES_DB: plants-api
+      POSTGRES_PASSWORD: admin1234
+      POSTGRES_DB: streaming-api
 
 volumes:
-  postgres-disk:
+  streaming-disk:
