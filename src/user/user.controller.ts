@@ -14,30 +14,30 @@ import { User } from '@prisma/client';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private service: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.create(createUserDto);
+  @Post('create')
+  create(@Body() data: CreateUserDto): Promise<User> {
+    return this.service.create(data);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  @Patch('update/:id')
+  update(@Param('id') id: string, @Body() data: UpdateUserDto): Promise<User> {
+    return this.service.update(id, data);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Get('findMany')
+  findMany(): Promise<any[]> {
+    return this.service.findMany();
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Get('findUnique/:id')
+  findUnique(@Param('id') id: string): Promise<User> {
+    return this.service.findUnique(id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Delete('delete/:id')
+  delete(@Param('id') id: string): Promise<{ message: string }> {
+    return this.service.delete(id);
   }
 }
