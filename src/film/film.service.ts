@@ -18,7 +18,7 @@ export class FilmService {
     });
 
     if (plantaExiste) {
-      throw new ConflictException('Essa planta já está cadastrada');
+      throw new ConflictException('this movie is already registered');
     }
 
     const planta = await this.database.film.create({ data: movieData });
@@ -36,20 +36,10 @@ export class FilmService {
     });
 
     if (!plantaExiste) {
-      throw new NotFoundException(
-        'Planta com o ID informado não foi encontrado',
-      );
+      throw new NotFoundException('the movie with the given ID was not found');
     }
 
     return plantaExiste;
-  }
-
-  async update(id: string, updateFilmDto: UpdateFilmDto): Promise<Film> {
-    const movie = await this.database.film.update({
-      data: updateFilmDto,
-      where: { id },
-    });
-    return movie;
   }
 
   async remove(id: string): Promise<{ message: string }> {
@@ -58,15 +48,21 @@ export class FilmService {
     });
 
     if (!movieExist) {
-      throw new NotFoundException(
-        'Planta com o ID informado não foi encontrado',
-      );
+      throw new NotFoundException('movie with entered ID not found');
     } else {
       await this.database.film.delete({
         where: { id },
       });
     }
 
-    return { message: 'Id foi encontrado e deletado ' };
+    return { message: 'ID was found and deleted' };
+  }
+
+  async update(id: string, updateFilmDto: UpdateFilmDto): Promise<Film> {
+    const movie = await this.database.film.update({
+      where: { id },
+      data: updateFilmDto,
+    });
+    return movie;
   }
 }

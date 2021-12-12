@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '@prisma/client';
 import AuthUser from './auth-user.decorator';

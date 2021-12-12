@@ -7,7 +7,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma.service';
-import { User } from '@prisma/client';
+import { User, Film } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -55,9 +55,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new NotFoundException(
-        'Usuário com o ID informado não foi encontrado',
-      );
+      throw new NotFoundException('User with the given id was not found');
     }
 
     delete user.password;
@@ -81,9 +79,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new NotFoundException(
-        'Usuário com o ID informado não foi encontrado',
-      );
+      throw new NotFoundException('User with the given id was not found');
     } else {
       await this.database.user.delete({
         where: { id },
@@ -91,7 +87,29 @@ export class UserService {
     }
 
     return {
-      message: 'Id foi encontrado e deletado com sucesso',
+      message: 'id was found and deleted successfully',
     };
+  }
+
+  async addList(userData: User, filmId: string) {
+    const film = await this.database.film.findUnique({ where: { id: filmId } });
+
+    if (!film) {
+      throw new NotFoundException('Film not found');
+    }
+
+    const user = await this.database.user.update({
+      where: { id: userData.id },
+      data: {
+        movies: {
+          connect: { id: film.id },
+        },
+      },
+      include: {
+        movies: true,
+      },
+    });
+    delete user.password;
+    return user;
   }
 }

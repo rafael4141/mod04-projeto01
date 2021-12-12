@@ -7,11 +7,23 @@ export class CreateFilmDto {
 
   @IsString()
   @IsNotEmpty()
+  gender: string;
+
+  @IsString()
+  @IsNotEmpty()
+  actors: string;
+
+  @IsString()
+  @IsNotEmpty()
+  producers: string;
+
+  @IsString()
+  @IsNotEmpty()
   description: string;
 
   @IsString()
   @IsNotEmpty()
-  release_year: number;
+  release_year: string;
 
   @IsString()
   @IsNotEmpty()

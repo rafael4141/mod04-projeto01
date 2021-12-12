@@ -14,13 +14,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validator(payload: { email: string }) {
-    const user = await tis.database.user.findUnique({
+  async validate(payload: { email: string }) {
+    const user = await this.database.user.findUnique({
       where: { email: payload.email },
     });
 
     if (!user) {
-      throw new UnauthorizedException('Usuário não encontrado.');
+      throw new UnauthorizedException('Usuário não encontrado');
     }
 
     return user;

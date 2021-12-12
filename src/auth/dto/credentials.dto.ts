@@ -6,8 +6,8 @@ export class CreadentialsDto {
   @IsNotEmpty()
   email: string;
 
-  @isString()
-  @isNotEmpty()
+  @IsString()
+  @IsNotEmpty()
   @Length(8, 15)
   password: string;
 }

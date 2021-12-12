@@ -15,6 +15,7 @@ export class AuthService {
     const userExists = await this.database.user.findUnique({
       where: { email: loginData.email },
     });
+
     if (!userExists) {
       throw new NotFoundException('User not found');
     }
@@ -28,7 +29,9 @@ export class AuthService {
       const ticket = {
         email: userExists.email,
       };
+
       const token = await this.jwt.sign(ticket);
+
       return { token };
     } else {
       throw new UnauthorizedException('Invalid credentials');
