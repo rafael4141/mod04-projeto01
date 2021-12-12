@@ -13,29 +13,29 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(private database: PrismaService) {}
-  async create(dadosDoUsuario: CreateUserDto): Promise<User> {
-    if (dadosDoUsuario.password !== dadosDoUsuario.password_confirmation) {
+  async create(userData: CreateUserDto): Promise<User> {
+    if (userData.password !== userData.password_confirmation) {
       throw new UnauthorizedException(
-        'A senha e a confirmação da senha não são compativeis',
+        'Password and password confirmation are not compatible',
       );
     }
     const userExists = await this.database.user.findUnique({
-      where: { email: dadosDoUsuario.email },
+      where: { email: userData.email },
     });
 
     if (userExists) {
-      throw new ConflictException('Esse e-mail já está cadastrado');
+      throw new ConflictException('This email is already registered');
     }
 
-    const saltos = 10;
-    const hashDaSenha = await bcrypt.hash(dadosDoUsuario.password, saltos);
+    const heels = 10;
+    const passwordHash = await bcrypt.hash(userData.password, heels);
 
-    delete dadosDoUsuario.password_confirmation;
+    delete userData.password_confirmation;
 
     const user = await this.database.user.create({
       data: {
-        ...dadosDoUsuario,
-        password: hashDaSenha,
+        ...userData,
+        password: passwordHash,
       },
     });
 
@@ -62,9 +62,9 @@ export class UserService {
     return user;
   }
 
-  async update(id: string, dadosDoUsuario: UpdateUserDto): Promise<User> {
+  async update(id: string, userData: UpdateUserDto): Promise<User> {
     const user = await this.database.user.update({
-      data: dadosDoUsuario,
+      data: userData,
       where: { id: id },
     });
 

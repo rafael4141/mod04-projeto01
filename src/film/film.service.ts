@@ -13,16 +13,16 @@ export class FilmService {
   constructor(private database: PrismaService) {}
 
   async create(movieData: CreateFilmDto): Promise<Film> {
-    const plantaExiste = await this.database.film.findUnique({
+    const movieExists = await this.database.film.findUnique({
       where: { name: movieData.name },
     });
 
-    if (plantaExiste) {
+    if (movieExists) {
       throw new ConflictException('this movie is already registered');
     }
 
-    const planta = await this.database.film.create({ data: movieData });
-    return planta;
+    const film = await this.database.film.create({ data: movieData });
+    return film;
   }
 
   async findAll(): Promise<Film[]> {
@@ -31,15 +31,15 @@ export class FilmService {
   }
 
   async findOne(id: string): Promise<Film> {
-    const plantaExiste = await this.database.film.findUnique({
+    const movieExists = await this.database.film.findUnique({
       where: { id },
     });
 
-    if (!plantaExiste) {
+    if (!movieExists) {
       throw new NotFoundException('the movie with the given ID was not found');
     }
 
-    return plantaExiste;
+    return movieExists;
   }
 
   async remove(id: string): Promise<{ message: string }> {
